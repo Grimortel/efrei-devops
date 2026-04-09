@@ -1,0 +1,52 @@
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# Local overrides / secrets
+*.local
+*.secret
+*.secrets
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+docker-compose.*.local.yml
+
+# Docker volumes / runtime data (if created in repo)
+**/data/
+**/db-data/
+**/postgres-data/
+**/mysql-data/
+
+# =========================
+# Java / Maven / Spring
+# =========================
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+
+# Spring Boot local config overrides
+**/application-local.yml
+**/application-local.properties
+**/application-dev.yml
+**/application-dev.properties
+
+# =========================
+# IDE / OS
+# =========================
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# =========================
+# Keys and certs
+# =========================
+*.pem
+*.key
+*.p12
+*.jks
