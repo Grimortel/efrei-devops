@@ -22,9 +22,14 @@ jobs:
           distribution: 'temurin'
 
      #finally build your app with the latest command
-      - name: Build and test with Maven
-        working-directory: ./api
-        run: mvn clean verify
+      - name: Build, test and Sonar analysis
+        run: mvn -B verify sonar:sonar \
+          -Dsonar.projectKey=Grimortel_efrei-devops \
+          -Dsonar.organization=grimortel \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          --file ./simple-api/pom.xml
+
   build-and-push-docker-image:
     needs: test-backend
     runs-on: ubuntu-24.04
