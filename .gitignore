@@ -44,7 +44,9 @@ docker-compose.*.local.yml
 Thumbs.db
 
 # =========================
-# Keys and certs
+# Keys and certs.env
+.env.*
+!.env.example
 # =========================
 *.pem
 *.key
