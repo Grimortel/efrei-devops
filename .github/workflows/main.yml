@@ -75,7 +75,6 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
 
   build-database-image:
-    needs: sonar-analysis
     runs-on: ubuntu-24.04
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -104,7 +103,6 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
 
   build-httpd-image:
-    needs: sonar-analysis
     runs-on: ubuntu-24.04
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
