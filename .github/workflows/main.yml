@@ -39,7 +39,7 @@ jobs:
       - name: Sonar analysis
         working-directory: ./api
         run: |
-          mvn -B sonar:sonar \
+          mvn -B -DskipTests compile sonar:sonar \
             -Dsonar.projectKey=Grimortel_efrei-devops \
             -Dsonar.organization=grimortel \
             -Dsonar.host.url=https://sonarcloud.io \
