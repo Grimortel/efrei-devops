@@ -68,7 +68,10 @@ jobs:
         with:
           context: ./api
           file: ./api/Dockerfile
-          tags: ${{ env.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-simple-api:sha-${{ github.sha }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-simple-api:run-${{ github.run_number }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
   build-database-image:
@@ -94,7 +97,10 @@ jobs:
         with:
           context: ./database
           file: ./database/Dockerfile
-          tags: ${{ env.DOCKERHUB_USERNAME }}/tp-devops-database:latest
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-database:sha-${{ github.sha }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-database:run-${{ github.run_number }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-database:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
   build-httpd-image:
@@ -120,5 +126,8 @@ jobs:
         with:
           context: ./server
           file: ./server/Dockerfile
-          tags: ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:sha-${{ github.sha }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:run-${{ github.run_number }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
