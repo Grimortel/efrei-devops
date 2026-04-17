@@ -144,6 +144,7 @@ jobs:
     if: failure() && github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -163,5 +164,16 @@ jobs:
           else
             git revert -n HEAD
           fi
-          git commit -m "Revert: CI/CD rollback due to test failure [skip ci]"
-          git push
+
+      - name: Create rollback pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Revert: CI/CD rollback due to test failure [skip ci]
+          title: Revert main due to CI failure
+          body: |
+            Automatic rollback proposal created because at least one CI job failed on main.
+            This PR reverts the latest main commit.
+          branch: rollback/main-${{ github.run_id }}
+          base: main
+          delete-branch: true
