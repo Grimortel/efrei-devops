@@ -152,6 +152,10 @@ jobs:
 
       - name: Revert to previous commit
         run: |
-          git revert -n HEAD
+          if git rev-parse HEAD^2 >/dev/null 2>&1; then
+            git revert -m 1 -n HEAD
+          else
+            git revert -n HEAD
+          fi
           git commit -m "Revert: CI/CD rollback due to test failure [skip ci]"
           git push
