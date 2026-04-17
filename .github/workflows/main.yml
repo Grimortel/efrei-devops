@@ -1,4 +1,7 @@
 name: CI devops 2025
+permissions:
+  contents: write
+
 on:
   #to begin you want to launch this job in main and develop
   push:
@@ -139,11 +142,14 @@ jobs:
     needs: [test-backend, sonar-analysis, build-backend-image, build-database-image, build-httpd-image]
     runs-on: ubuntu-24.04
     if: failure() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Configure git
         run: |
