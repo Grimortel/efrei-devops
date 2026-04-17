@@ -10,7 +10,8 @@ RUN mvn -B dependency:go-offline
 COPY src ./src
 RUN mvn -B clean package -DskipTests
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-alpine-broken
+# FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copie du jar compilé et commande de run
