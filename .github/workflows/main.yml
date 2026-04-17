@@ -134,3 +134,24 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:run-${{ github.run_number }}
             ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+  rollback:
+    needs: [test-backend, sonar-analysis, build-backend-image, build-database-image, build-httpd-image]
+    runs-on: ubuntu-24.04
+    if: failure() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config --global user.email "auto-ci@github.com"
+          git config --global user.name "auto rollback"
+
+      - name: Revert to previous commit
+        run: |
+          git revert -n HEAD
+          git commit -m "Revert: CI/CD rollback due to test failure [skip ci]"
+          git push
