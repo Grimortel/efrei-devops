@@ -142,9 +142,39 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
+  build-front-image:
+    runs-on: ubuntu-24.04
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.base_ref == 'main')
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != ''
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+
+      - name: Build image and push front
+        uses: docker/build-push-action@v6
+        with:
+          context: ./devops-front-main
+          file: ./devops-front-main/Dockerfile
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-front:sha-${{ github.sha }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-front:run-${{ github.run_number }}
+            ${{ env.DOCKERHUB_USERNAME }}/tp-devops-front:latest
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
   deploy:
     runs-on: ubuntu-24.04
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy == true
+    if: github.event_name == 'workflow_dispatch'
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -172,10 +202,10 @@ jobs:
       - name: Deploy application
         working-directory: ./ansible
         run: |
-          ansible-playbook -i inventories/setup.yml playbook.yml -e "dockerhub_username=${{ secrets.DOCKERHUB_USERNAME }}"
+          ansible-playbook -i inventories/setup.yml playbook.yml -e "dockerhub_username=${{ secrets.DOCKERHUB_USERNAME }} front_image_tag=sha-${{ github.sha }}"
 
   rollback:
-    needs: [test-backend, sonar-analysis, build-backend-image, build-database-image, build-httpd-image]
+    needs: [test-backend, sonar-analysis, build-backend-image, build-database-image, build-httpd-image, build-front-image]
     runs-on: ubuntu-24.04
     if: failure() && github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
