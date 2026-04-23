@@ -1,0 +1,12 @@
+- name: Run database
+  docker_container:
+    name: "{{ db_container_name }}"
+    image: "{{ database_image }}"
+    pull: true
+    env:
+      POSTGRES_DB: "{{ db_name }}"
+      POSTGRES_USER: "{{ db_user }}"
+      POSTGRES_PASSWORD: "{{ db_password }}"
+    networks:
+      - name: "{{ docker_network_name }}"
+    restart_policy: always

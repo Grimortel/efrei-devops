@@ -1,0 +1,12 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ansible/roles/app
+dockerhub_username: grimortel
+app_image: "{{ dockerhub_username }}/tp-devops-simple-api:latest"
+app_container_name: app
+db_container_name: postgres-db
+db_port: "5432"
+db_name: db
+db_user: usr
+db_password: pwd
+docker_network_name: app_network
