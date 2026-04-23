@@ -2,12 +2,14 @@ FROM node:12.16.3-stretch-slim AS build
 
 WORKDIR /opt/front
 
+ARG VUE_APP_API_URL=/api
+ENV VUE_APP_API_URL=${VUE_APP_API_URL}
+
 COPY src/ src/
 COPY public/ public/
 COPY package.json .
 COPY yarn.lock .
 COPY default.conf .
-COPY .env.production .
 
 RUN npm install
 RUN npm run build
