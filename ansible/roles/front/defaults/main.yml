@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ansible/roles/front
+dockerhub_username: grimortel
+front_image: "{{ dockerhub_username }}/tp-devops-front:latest"
+front_image_tag: latest
+front_container_name: front
+docker_network_name: app_network

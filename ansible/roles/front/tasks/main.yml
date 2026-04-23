@@ -1,0 +1,9 @@
+- name: Run front
+  docker_container:
+    name: "{{ front_container_name }}"
+    image: "{{ dockerhub_username }}/tp-devops-front:{{ front_image_tag }}"
+    pull: true
+    networks:
+      - name: "{{ docker_network_name }}"
+        aliases:
+          - front
