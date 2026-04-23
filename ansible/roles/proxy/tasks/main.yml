@@ -1,0 +1,9 @@
+- name: Run proxy
+  docker_container:
+    name: "{{ proxy_container_name }}"
+    image: "{{ proxy_image }}"
+    pull: true
+    ports:
+      - "80:80"
+    networks:
+      - name: "{{ docker_network_name }}"

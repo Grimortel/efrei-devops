@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ansible/roles/proxy
+dockerhub_username: grimortel
+proxy_image: "{{ dockerhub_username }}/tp-devops-httpd:latest"
+proxy_container_name: httpd
+docker_network_name: app_network
