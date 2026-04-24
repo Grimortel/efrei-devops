@@ -174,7 +174,6 @@ jobs:
   deploy:
     needs: [test-backend, sonar-analysis, build-backend-image, build-database-image, build-httpd-image, build-front-image]
     runs-on: ubuntu-24.04
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy == true
     environment: production
     steps:
       - name: Checkout code
